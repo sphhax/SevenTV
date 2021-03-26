@@ -8,9 +8,7 @@ import styled from "styled-components";
 
 class Main extends React.Component {
 	render() {
-		return (
-			<Main.Style></Main.Style>
-		);
+		return <Main.Style></Main.Style>;
 	}
 }
 
