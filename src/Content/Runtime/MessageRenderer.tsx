@@ -1,11 +1,11 @@
-import { Twitch } from "src/Page/Util/Twitch";
-import React from "react";
-import ReactDOM from "react-dom";
-import { DataStructure } from "@typings/typings/DataStructure";
-import { Config } from "src/Config";
-import { Emote } from "src/Page/Components/EmoteComponent";
-import { Content } from "src/Content/Content";
-import { MessageBody } from "src/Page/Components/MessageBody";
+import { Twitch } from 'src/Page/Util/Twitch';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { DataStructure } from '@typings/typings/DataStructure';
+import { Config } from 'src/Config';
+import { Emote } from 'src/Page/Components/EmoteComponent';
+import { Content } from 'src/Content/Content';
+import { MessageBody } from 'src/Page/Components/MessageBody';
 
 export class MessageRenderer {
 	private jsx = [] as JSX.Element[];
@@ -23,11 +23,11 @@ export class MessageRenderer {
 		const el = this.getElement();
 		if (!el) return undefined;
 
-		const container = el.querySelector(".chat-line__no-background") ?? el.querySelector(Twitch.Selectors.ChatMessageContainer) ?? el;
-		el.querySelector(".message")?.remove();
-		const newContext = document.createElement("span");
-		newContext.classList.add("7tv-message-context");
-		newContext.style.position = "relative";
+		const container = el.querySelector('.chat-line__no-background') ?? el.querySelector(Twitch.Selectors.ChatMessageContainer) ?? el;
+		el.querySelector('.message')?.remove();
+		const newContext = document.createElement('span');
+		newContext.classList.add('7tv-message-context');
+		newContext.style.position = 'relative';
 
 		ReactDOM.render(<MessageBody parts={this.jsx} />, newContext);
 		container.appendChild(newContext);
@@ -37,7 +37,7 @@ export class MessageRenderer {
 	 * Create a new message tree
 	 */
 	renderMessageTree(): JSX.Element[] {
-		const color = this.msg.seventv.is_slash_me ? this.msg.user.color : "";
+		const color = this.msg.seventv.is_slash_me ? this.msg.user.color : '';
 		const parts = this.msg.seventv.parts; // Get the tokenized emotes
 		const words = this.msg.seventv.words;
 		const element = this.getElement();
@@ -45,7 +45,7 @@ export class MessageRenderer {
 
 		if (!element) return [];
 		for (const { type, content } of parts) {
-			if (type === "text") {
+			if (type === 'text') {
 				let text = content as string;
 				// Scan for first party or other third party emotes
 				for (let i = 0; i < words.length; ++i) {
@@ -56,7 +56,7 @@ export class MessageRenderer {
 					const superceded = element.querySelector(`img[alt="${word.replace(/"/g, '\\"')}"]`) as HTMLImageElement;
 					if (!superceded) continue;
 
-					text = text.replace(word, "");
+					text = text.replace(word, '');
 					jsxArray.push(
 						Content.EmoteStore.getElement(superceded.alt) ??
 							Content.EmoteStore.addElement(
@@ -66,7 +66,7 @@ export class MessageRenderer {
 										preview: superceded.src,
 										small: superceded.src,
 									}}
-									provider={superceded.getAttribute("data-provider") ?? "N/A"}
+									provider={superceded.getAttribute('data-provider') ?? 'N/A'}
 									name={superceded.alt}
 								/>
 							)
@@ -74,12 +74,12 @@ export class MessageRenderer {
 				}
 
 				jsxArray.push(
-					<span style={{ color, wordWrap: "break-word" }} className="text-fragment 7tv-txf">
-						{" "}
-						{text as string}{" "}
+					<span style={{ color, wordWrap: 'break-word' }} className="text-fragment 7tv-txf">
+						{' '}
+						{text as string}{' '}
 					</span>
 				);
-			} else if (type === "emote") {
+			} else if (type === 'emote') {
 				const emote = content as DataStructure.Emote;
 
 				const reactElement =
@@ -99,13 +99,13 @@ export class MessageRenderer {
 					);
 
 				jsxArray.push(reactElement);
-			} else if (type === "mention") {
+			} else if (type === 'mention') {
 				jsxArray.push(<strong> @{content} </strong>);
-			} else if (type === "link") {
+			} else if (type === 'link') {
 				jsxArray.push(
 					<a href={(content as any).url} target="_blank" rel="noreferrer">
-						{" "}
-						{(content as any).displayText}{" "}
+						{' '}
+						{(content as any).displayText}{' '}
 					</a>
 				);
 			}

@@ -1,10 +1,10 @@
-import { DataStructure } from "@typings/typings/DataStructure";
-import { Page } from "src/Page/Page";
-import { Twitch } from "src/Page/Util/Twitch";
+import { DataStructure } from '@typings/typings/DataStructure';
+import { Page } from 'src/Page/Page';
+import { Twitch } from 'src/Page/Util/Twitch';
 
 export class MessagePatcher {
 	static cachedEmotes = new Map<string, JSX.Element>();
-	static trash = document.createElement("trash");
+	static trash = document.createElement('trash');
 
 	constructor(private msg: Twitch.ChatMessage, private emoteSet: DataStructure.Emote[]) {}
 
@@ -28,20 +28,20 @@ export class MessagePatcher {
 			if (part.type === 4) {
 				// Is mention
 				this.msg.seventv.parts.push({
-					type: "mention",
+					type: 'mention',
 					content: (part.content as any).recipient,
 				});
 				continue;
 			} else if (part.type === 5) {
 				this.msg.seventv.parts.push({
-					type: "link",
+					type: 'link',
 					content: part.content,
 				});
 			}
 
 			// Get part text content
 			const text: string = (part.content as any)?.alt ?? (part.content as string);
-			if (typeof text !== "string") continue;
+			if (typeof text !== 'string') continue;
 
 			// Check if part contains one or more 7TV emotes?
 			const matches = MessagePatcher.getRegexp(eNames);
@@ -61,8 +61,8 @@ export class MessagePatcher {
 				if (currentStack.length === 0) return undefined;
 
 				this.msg.seventv.parts.push({
-					type: "text",
-					content: currentStack.join(" "),
+					type: 'text',
+					content: currentStack.join(' '),
 				});
 				currentStack = [];
 			};
@@ -72,7 +72,7 @@ export class MessagePatcher {
 					pushCurrentStack(); // Push the current word stack as a single part
 					// Then push the emote part
 					this.msg.seventv.parts.push({
-						type: "emote",
+						type: 'emote',
 						content: eIndex[word],
 					});
 				} else {
@@ -90,11 +90,11 @@ export class MessagePatcher {
 	render(line: Twitch.ChatLineAndComponent): void {
 		// Hide twitch fragments
 		const oldFragments = Array.from(
-			line.element.querySelectorAll<HTMLSpanElement | HTMLImageElement>("span.text-fragment, img.chat-line__message--emote")
+			line.element.querySelectorAll<HTMLSpanElement | HTMLImageElement>('span.text-fragment, img.chat-line__message--emote')
 		);
 		for (const oldFrag of oldFragments) {
-			oldFrag.setAttribute("superceded", "");
-			oldFrag.style.display = "none";
+			oldFrag.setAttribute('superceded', '');
+			oldFrag.style.display = 'none';
 		}
 
 		// Render 7TV third party stuff (and idk...)
@@ -105,14 +105,14 @@ export class MessagePatcher {
 			msg: this.msg,
 			elementId: line.element.id,
 		}); // Rendering the message body moves on Content.MessageRenderer from now on
-		window.dispatchEvent(new CustomEvent("7TV#RenderChatLine", { detail: data }));
+		window.dispatchEvent(new CustomEvent('7TV#RenderChatLine', { detail: data }));
 	} // [i] This is done on the pagescript, because Twitch will maintain references to our React components and cause a memory leak!
 
 	/**
 	 * Get a Regular Expression matching a list of emotes
 	 */
 	static getRegexp(emoteNames?: string[]): RegExp {
-		return new RegExp(`(?<![^ ])(${emoteNames ? emoteNames.join("|") : "[^ ]*"})(?![^ ])`, "g");
+		return new RegExp(`(?<![^ ])(${emoteNames ? emoteNames.join('|') : '[^ ]*'})(?![^ ])`, 'g');
 		// Negative Lookbehind	- Match Enote Names - Negative Lookahead
 		// Match space backward or nothing			  Match space forward or nothing
 	}

@@ -1,7 +1,7 @@
-import Tooltip from "@material-ui/core/Tooltip";
-import * as React from "react";
-import { useState } from "react";
-import styled from "styled-components";
+import Tooltip from '@material-ui/core/Tooltip';
+import * as React from 'react';
+import { useState } from 'react';
+import styled from 'styled-components';
 
 export function Emote(props: Emote.Props): JSX.Element {
 	const { src, name, ownerName, provider, global } = props;
@@ -20,7 +20,7 @@ export function Emote(props: Emote.Props): JSX.Element {
 		});
 
 	return (
-		<Emote.Container className="7tv-emote" style={{ display: "inline-block" }}>
+		<Emote.Container className="7tv-emote" style={{ display: 'inline-block' }}>
 			<Tooltip
 				enterDelay={0}
 				TransitionProps={{ timeout: 50 }}
@@ -32,11 +32,11 @@ export function Emote(props: Emote.Props): JSX.Element {
 
 						<Emote.Details>
 							<h3 className="emote-name"> {name} </h3>
-							{ownerName ? <span className="emote-submitter"> {ownerName} </span> : ""}
+							{ownerName ? <span className="emote-submitter"> {ownerName} </span> : ''}
 
 							<h4>
-								{" "}
-								{provider} {global ? "Global" : "Channel"} Emote{" "}
+								{' '}
+								{provider} {global ? 'Global' : 'Channel'} Emote{' '}
 							</h4>
 						</Emote.Details>
 					</React.Fragment>
@@ -47,7 +47,7 @@ export function Emote(props: Emote.Props): JSX.Element {
 				<Emote.Style className="seventv-emote" onClick={(ev: React.MouseEvent) => openDetails(ev)}>
 					<img
 						alt={name}
-						height={provider === "emoji" ? 19.5 : ""}
+						height={provider === 'emoji' ? 19.5 : ''}
 						className="chat-image chat-line__message--emote"
 						src={src.small}
 					/>
@@ -70,12 +70,12 @@ export namespace Emote {
 	}
 
 	export const Container = styled.div`
-		display: "inline-block";
+		display: 'inline-block';
 		margin-bottom: 10px;
 	`;
 
 	export const Style = styled.div`
-		display: "inline-flex";
+		display: 'inline-flex';
 	`;
 
 	export const TooltipImage = styled.div`

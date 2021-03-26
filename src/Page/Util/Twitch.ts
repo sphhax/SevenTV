@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { DataStructure } from "@typings/typings/DataStructure";
-import * as React from "react";
-import { MessagePatcher } from "src/Page/Util/MessagePatcher";
+import { DataStructure } from '@typings/typings/DataStructure';
+import * as React from 'react';
+import { MessagePatcher } from 'src/Page/Util/MessagePatcher';
 
 export class Twitch {
 	findReactParents(node: any, predicate: Twitch.FindReactInstancePredicate, maxDepth = 15, depth = 0): Twitch.AnyPureComponent | null {
@@ -41,7 +41,7 @@ export class Twitch {
 
 	getReactInstance(el: Element | null): (React.Component & { [x: string]: any }) | undefined {
 		for (const k in el) {
-			if (k.startsWith("__reactInternalInstance$")) {
+			if (k.startsWith('__reactInternalInstance$')) {
 				return (el as any)[k] as any;
 			}
 		}
@@ -81,7 +81,7 @@ export class Twitch {
 	 */
 	getChatLine(el: HTMLElement): Twitch.GetChatLineResult {
 		const inst = this.getReactInstance(el);
-		const separator = this.findReactChildren(inst, (n) => n.key === "separator", 1000);
+		const separator = this.findReactChildren(inst, (n) => n.key === 'separator', 1000);
 
 		return {
 			component: inst?.return?.stateNode,
@@ -115,18 +115,18 @@ export class Twitch {
 
 export namespace Twitch {
 	export namespace Selectors {
-		export const ROOT = "#root div";
+		export const ROOT = '#root div';
 		export const ChatContainer = 'section[data-test-selector="chat-room-component-layout"]';
-		export const ChatScrollableContainer = ".chat-scrollable-area__message-container";
-		export const ChatLine = ".chat-line__message";
-		export const ChatInput = ".chat-input textarea";
+		export const ChatScrollableContainer = '.chat-scrollable-area__message-container';
+		export const ChatLine = '.chat-line__message';
+		export const ChatInput = '.chat-input textarea';
 		export const ChatInputButtonsContainer = 'div[data-test-selector="chat-input-buttons-container"]';
-		export const ChatMessageContainer = ".chat-line__message-container";
-		export const ChatUsernameContainer = ".chat-line__username-container";
-		export const ChatAuthorDisplayName = ".chat-author__display-name";
-		export const ChatMessageBadges = ".chat-line__message--badges";
-		export const ChatMessageUsername = ".chat-line__usernames";
-		export const ChatMessageTimestamp = ".chat-line__timestamp";
+		export const ChatMessageContainer = '.chat-line__message-container';
+		export const ChatUsernameContainer = '.chat-line__username-container';
+		export const ChatAuthorDisplayName = '.chat-author__display-name';
+		export const ChatMessageBadges = '.chat-line__message--badges';
+		export const ChatMessageUsername = '.chat-line__usernames';
+		export const ChatMessageTimestamp = '.chat-line__timestamp';
 	}
 
 	export type FindReactInstancePredicate = (node: any) => boolean;
@@ -280,7 +280,7 @@ export namespace Twitch {
 				search: string;
 				state: any;
 			};
-			userBadges: { [key: string]: "1" | "0" };
+			userBadges: { [key: string]: '1' | '0' };
 			userID: string;
 		},
 		{
@@ -312,7 +312,7 @@ export namespace Twitch {
 
 	export interface ChatMessage {
 		badgesDynamicData: any;
-		badges: { [key: string]: "1" | "0" };
+		badges: { [key: string]: '1' | '0' };
 		banned: boolean;
 		bits: number;
 		deleted: boolean;
@@ -344,7 +344,7 @@ export namespace Twitch {
 			srcSet: string;
 			srcSet2: string;
 			text: string;
-			type: "emote" | "text";
+			type: 'emote' | 'text';
 		}[];
 		ffz_emotes: any;
 		emotes?: any;
@@ -361,23 +361,23 @@ export namespace Twitch {
 			emoteID?: string;
 			images?: {
 				dark: {
-					"1x": string;
-					"2x": string;
-					"3x": string;
-					"4x": string;
+					'1x': string;
+					'2x': string;
+					'3x': string;
+					'4x': string;
 				};
 				light: {
-					"1x": string;
-					"2x": string;
-					"3x": string;
-					"4x": string;
+					'1x': string;
+					'2x': string;
+					'3x': string;
+					'4x': string;
 				};
 				themed: boolean;
 			};
 		}
 
 		export interface AppPart {
-			type: "text" | "emote" | "link" | "mention";
+			type: 'text' | 'emote' | 'link' | 'mention';
 			content?: DataStructure.Emote | string | { [key: string]: any };
 		}
 	}

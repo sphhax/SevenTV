@@ -1,10 +1,10 @@
-import { Observable } from "rxjs";
-import { filter, tap } from "rxjs/operators";
-import { Logger } from "src/Logger";
-import { Page } from "src/Page/Page";
-import { BadgeManager } from "src/Page/Util/BadgeManager";
-import { MessagePatcher } from "src/Page/Util/MessagePatcher";
-import { Twitch } from "src/Page/Util/Twitch";
+import { Observable } from 'rxjs';
+import { filter, tap } from 'rxjs/operators';
+import { Logger } from 'src/Logger';
+import { Page } from 'src/Page/Page';
+import { BadgeManager } from 'src/Page/Util/BadgeManager';
+import { MessagePatcher } from 'src/Page/Util/MessagePatcher';
+import { Twitch } from 'src/Page/Util/Twitch';
 
 export class ChatListener extends Observable<Twitch.ChatMessage> {
 	/** Create a Twitch instance bound to this listener */
@@ -16,7 +16,7 @@ export class ChatListener extends Observable<Twitch.ChatMessage> {
 
 	constructor() {
 		super((observer) => {
-			Logger.Get().info("Listening for chat messages");
+			Logger.Get().info('Listening for chat messages');
 
 			// Begin listening to incoming messages
 			this.twitch.getChatController().props.messageHandlerAPI.addMessageHandler((msg) => {
@@ -91,7 +91,7 @@ export class ChatListener extends Observable<Twitch.ChatMessage> {
 	 */
 	observeDOM(): Observable<Twitch.ChatLineAndComponent> {
 		return new Observable<Twitch.ChatLineAndComponent>((observer) => {
-			Logger.Get().info("Creating MutationObserver");
+			Logger.Get().info('Creating MutationObserver');
 
 			const mutationObserver = new MutationObserver(() => {
 				const lines = this.twitch.getChatLines(Array.from(this.pendingMessages.values()));
@@ -105,8 +105,8 @@ export class ChatListener extends Observable<Twitch.ChatMessage> {
 				// Find removed nodes
 			});
 
-			const container = this.twitch.getChat().state.chatListElement.querySelector(".chat-scrollable-area__message-container");
-			if (!container) throw new Error("Could not find chat container");
+			const container = this.twitch.getChat().state.chatListElement.querySelector('.chat-scrollable-area__message-container');
+			if (!container) throw new Error('Could not find chat container');
 
 			mutationObserver.observe(container, {
 				childList: true,

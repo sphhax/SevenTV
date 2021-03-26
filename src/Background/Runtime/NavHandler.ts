@@ -1,5 +1,5 @@
-import { DataStructure } from "@typings/typings/DataStructure";
-import { asyncScheduler, BehaviorSubject, iif, Observable, of, scheduled, Subject, timer } from "rxjs";
+import { DataStructure } from '@typings/typings/DataStructure';
+import { asyncScheduler, BehaviorSubject, iif, Observable, of, scheduled, Subject, timer } from 'rxjs';
 import {
 	catchError,
 	concatAll,
@@ -14,11 +14,11 @@ import {
 	takeUntil,
 	tap,
 	toArray,
-} from "rxjs/operators";
-import { Background } from "src/Background/Background";
-import { Config } from "src/Config";
-import { Logger } from "src/Logger";
-import { version as extVersion } from "../../../package.json";
+} from 'rxjs/operators';
+import { Background } from 'src/Background/Background';
+import { Config } from 'src/Config';
+import { Logger } from 'src/Logger';
+import { version as extVersion } from '../../../package.json';
 
 export class NavHandler {
 	private versionChecked = false;
@@ -40,10 +40,10 @@ export class NavHandler {
 			if (tabId === 0) return undefined;
 
 			// Listen for tabs being unloaded
-			if (msg.tag === "Unload") {
+			if (msg.tag === 'Unload') {
 				this.loadedTabs.delete(tabId);
 				Logger.Get().info(`Unloaded tab ${tabId}`);
-				sendResponse("goodbye");
+				sendResponse('goodbye');
 			}
 		});
 
@@ -58,8 +58,8 @@ export class NavHandler {
 					chrome.tabs.executeScript(
 						change.tab.id as number,
 						{
-							file: "content.js",
-							runAt: "document_start",
+							file: 'content.js',
+							runAt: 'document_start',
 						},
 						() => {
 							if (!change.tab) return Logger.Get().error(`Tried to start content script but tab no longer exists`);
@@ -73,7 +73,7 @@ export class NavHandler {
 										tap((emotes) =>
 											Background.Messaging.send(
 												{
-													tag: "MapGlobalEmotes",
+													tag: 'MapGlobalEmotes',
 													emotes,
 												},
 												change.tab.id as number
@@ -91,7 +91,7 @@ export class NavHandler {
 										map((res) => {
 											Background.Messaging.send(
 												{
-													tag: "OutdatedVersion",
+													tag: 'OutdatedVersion',
 													latestVersion: res.version,
 													clientVersion: extVersion,
 												},
@@ -114,7 +114,7 @@ export class NavHandler {
 										map((emotes) =>
 											Background.Messaging.send(
 												{
-													tag: "LoadChannel",
+													tag: 'LoadChannel',
 													emotes,
 													channelName: change.channelName,
 												},
@@ -136,7 +136,7 @@ export class NavHandler {
 	}
 
 	getGlobalEmotes(tab: chrome.tabs.Tab): Observable<DataStructure.Emote> {
-		if (!tab.id) throw new Error("tab id is undefined or null");
+		if (!tab.id) throw new Error('tab id is undefined or null');
 
 		// Make one time request to fetch global emotes
 		return this.globalEmoteCache.pipe(
@@ -148,7 +148,7 @@ export class NavHandler {
 						tap((emotes) => Logger.Get().info(`Retrieved ${emotes.length} global emotes from cache`)),
 						mergeAll()
 					),
-					this.getEmotes("@global").pipe(
+					this.getEmotes('@global').pipe(
 						toArray(),
 						tap((emotes) => this.globalEmoteCache.next(emotes)),
 						mergeAll()
@@ -161,14 +161,14 @@ export class NavHandler {
 	private onUpdate(id: number, change: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab): void {
 		if (!tab.url) return undefined;
 		if (!this.channelURL.test(tab.url)) return undefined;
-		if (change.status !== "complete") return undefined;
+		if (change.status !== 'complete') return undefined;
 
 		// const url = new URL(tab.url.replace('/popout', ''));
 		const parsedURL = tab.url.match(this.channelURL);
 		if (!parsedURL) return undefined;
 
 		const channelName = parsedURL[3]; // Index 3 of regex-matched string will always be the channel name
-		Logger.Get().info("Navigation to channel", channelName);
+		Logger.Get().info('Navigation to channel', channelName);
 
 		// Emit channels update
 		this.channels.next({
@@ -177,11 +177,11 @@ export class NavHandler {
 		});
 	}
 
-	getEmotes(channelName: string | "@global"): Observable<DataStructure.Emote> {
+	getEmotes(channelName: string | '@global'): Observable<DataStructure.Emote> {
 		return new Observable<DataStructure.Emote>((observer) => {
 			const xhr = new XMLHttpRequest();
 
-			xhr.addEventListener("load", () => {
+			xhr.addEventListener('load', () => {
 				const data = JSON.parse(xhr.responseText);
 				if (xhr.status >= 400 && xhr.status <= 599) {
 					return observer.error(Error(data.error.message));
@@ -196,8 +196,8 @@ export class NavHandler {
 			});
 
 			xhr.open(
-				"GET",
-				Config.apiUrl + (channelName === "@global" ? `/emotes?globalEmotes=only&pageSize=150` : `/channels/${channelName}/emotes`)
+				'GET',
+				Config.apiUrl + (channelName === '@global' ? `/emotes?globalEmotes=only&pageSize=150` : `/channels/${channelName}/emotes`)
 			);
 			xhr.send();
 		});
@@ -207,9 +207,9 @@ export class NavHandler {
 		return new Observable<NavHandler.CheckVersionResult>((observer) => {
 			const xhr = new XMLHttpRequest();
 
-			xhr.addEventListener("load", () => {
+			xhr.addEventListener('load', () => {
 				const data = JSON.parse(xhr.responseText);
-				if (typeof data.version === "string") {
+				if (typeof data.version === 'string') {
 					observer.next({
 						version: data.version,
 						releaseUrl: data.release_url,
@@ -218,7 +218,7 @@ export class NavHandler {
 
 				observer.complete();
 			});
-			xhr.open("GET", `${Config.apiUrl}/extension?type=chrome`);
+			xhr.open('GET', `${Config.apiUrl}/extension?type=chrome`);
 			xhr.send();
 		});
 	}

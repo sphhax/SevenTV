@@ -1,5 +1,5 @@
-import React from "react";
-import { cloneElement, Fragment } from "react";
+import React from 'react';
+import { cloneElement, Fragment } from 'react';
 
 export function MessageBody(props: MessageBody.Props): JSX.Element {
 	const { parts } = props;
