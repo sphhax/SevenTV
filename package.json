@@ -5,7 +5,7 @@
 	"description": "SevenTV Browser Extension",
 	"main": "index.ts",
 	"lint-staged": {
-		"*.{js,ts,tsx,jsx}": "eslint",
+		"*.{js,ts,tsx,jsx,json}": "eslint",
 		"*.{css,scss}": "stylelint"
 	},
 	"husky": {
